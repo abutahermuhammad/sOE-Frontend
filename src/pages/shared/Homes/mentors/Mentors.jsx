@@ -16,10 +16,10 @@ useEffect(() => {
 
 <div className=" bg-[url('https://i.ibb.co/Ny7fw1v/bg-01.png')] bg-no-repeat bg-cover opacity-95">
 
-      <div className="md:container mx-auto py-10">
-      <h1 className='text-[40px] font-bold text-center my-5 text-white
-       border-b-2 border-green-600 '>Our Mentors</h1>
-      <div className="grid md:grid-cols-4 gap-5">
+      <div className="md:container mx-auto  ">
+      <h1 className='text-[40px] font-bold text-center  text-white
+       border-b-2 border-green-600 pt-10 pb-5 '>Our Mentors</h1>
+      <div className="grid md:grid-cols-4 gap-5 py-10">
         {/* {
           mentors?.map(mentor=> <MentorsCard 
           key={mentor.id}

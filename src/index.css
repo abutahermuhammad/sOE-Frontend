@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 body{
-  font-family: 'Urbanist', sans-serif;
-  
+  /* font-family: 'Urbanist', sans-serif; */
+  font-family: 'Baloo Da 2', sans-serif;
 }
