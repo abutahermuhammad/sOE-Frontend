@@ -1,0 +1,19 @@
+/* styles.css (or your preferred stylesheet) */
+.ping-slow {
+  animation: ping 3s linear infinite; /* Change the '2s' value to make it slower or faster */
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.5;
+  }
+}
