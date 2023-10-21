@@ -2,6 +2,7 @@ import Marquee from "react-fast-marquee";
 
 
 const SuccessSlide = () => {
+ 
   return (
     <Marquee pauseOnHover={true}
      className="gird grid-cols-3 md:grid-cols-6 gap-5 " >
