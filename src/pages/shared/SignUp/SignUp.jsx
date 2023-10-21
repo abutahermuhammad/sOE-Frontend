@@ -16,7 +16,7 @@ const SignUp = () => {
 
     // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
     const formattedDate = `${year}-${month}-${day}`;
-    const userData = {name, phone, password, status: 'active',Date:formattedDate}
+    const userData = {name, phone, password, status: 'active',Date:formattedDate, role:'student', photo:' '}
     console.log(userData);
     // post data on database
     fetch('http://localhost:5000/register',{

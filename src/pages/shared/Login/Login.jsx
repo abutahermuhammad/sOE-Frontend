@@ -1,35 +1,25 @@
 // import React from 'react'
 // import Lottie from 'react-lottie';
 
+import { useContext } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../provider/AuthProvider";
 
 // import typing from "../../../../public/typing.json"
 const Login = () => {
-  const [error, setError] = useState("");
+const navigate = useNavigate();
+  const {user, error, login} = useContext(AuthContext);
 
-  const handleLogin = (event) =>{
+  const handleLogin = async(event) =>{
     event.preventDefault();
     const form = event.target;
     const phone = form.phone.value;
     const password = form.password.value;
-console.log(phone, password);
-fetch('http://localhost:5000/logged',{
-  method:"POST",
-  headers:{
-    'content-type': 'application/json'
-  },
-  body:JSON.stringify({phone,password})
-})
-.then(res => res.json())
-.then(data => {
-  console.log(data);
-  if(data.status == "invalid User"){
-  setError('Something went wrong')
-    
-   }
 
-})
+await login(phone,password)
+navigate('/')
+console.log("user auth", user);
   }
 
 
