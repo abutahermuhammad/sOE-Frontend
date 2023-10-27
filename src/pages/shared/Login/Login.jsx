@@ -18,9 +18,16 @@ const navigate = useNavigate();
     const password = form.password.value;
 
 await login(phone,password)
-navigate('/')
-console.log("user auth", user);
+
+if(user.status == "invalid User"){
+  navigate('/login')
+}
+// else{
+//   navigate('/')
+// }
+console.log("log user", user)
   }
+
 
 
   return (

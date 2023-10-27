@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { createContext } from "react";
 
+
 export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({ isAuthencitaed: false })
   const [error, setError] = useState('');
+ 
 
   // login system
   const login = (phone, password) => {
@@ -25,6 +27,7 @@ const AuthProvider = ({ children }) => {
         }
         else if (data.status == 'valid User') {
           setUser({ isAuthencitaed: true })
+          
         }
 
       })

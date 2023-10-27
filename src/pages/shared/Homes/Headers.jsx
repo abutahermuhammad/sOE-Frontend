@@ -29,8 +29,7 @@ const Headers = () => {
                 <>
                   <li className=" hover:bg-white rounded-md hover:font-semibold ">
                     <Link to="/dashboard"> Dashboard </Link> </li>
-                  <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link to="/receipt"> Receipt Entry </Link> </li>
+                  
                 </>
               )
 
@@ -57,8 +56,7 @@ const Headers = () => {
                 <>
                   <li className=" hover:bg-white rounded-md hover:font-semibold ">
                     <Link to="/dashboard"> Dashboard </Link> </li>
-                  <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link to="/receipt"> Receipt Entry </Link> </li>
+                 
                 </>
               )
 

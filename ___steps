@@ -1,0 +1,77 @@
+import React, { useState, useEffect } from 'react';
+
+const Quiz = () => {
+  const [quizData, setQuizData] = useState(null);
+  const [answers, setAnswers] = useState({});
+
+  useEffect(() => {
+    // Fetch quiz data from the server based on the selected quiz
+    // Update `quizData` with the questions and answer choices
+  }, []);
+
+  const handleAnswerSelection = (questionId, selectedAnswer) => {
+    // Update the selected answer for the current question in the `answers` state
+    setAnswers({
+      ...answers,
+      [questionId]: selectedAnswer,
+    });
+  };
+
+  const handleSubmitQuiz = () => {
+    // Send the `answers` data to the server for evaluation
+    // Receive and display feedback and results
+  };
+
+  return (
+    <div>
+      {quizData && (
+        <div>
+          {quizData.questions.map((question) => (
+            <div key={question.id} className="question">
+              <p>{question.text}</p>
+              <ul>
+                {question.choices.map((choice, index) => (
+                  <li key={index}>
+                    <input
+                      type="radio"
+                      id={`choice-${index}`}
+                      name={`question-${question.id}`}
+                      value={choice}
+                      onChange={() => handleAnswerSelection(question.id, choice)}
+                    />
+                    <label htmlFor={`choice-${index}`}>{choice}</label>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+      <button onClick={handleSubmitQuiz}>Submit</button>
+    </div>
+  );
+};
+
+export default Quiz;
+
+// validation answer on server side
+// Assuming `userAnswers` is an array of user selections with corresponding question IDs
+const userSelections = await Promise.all(userAnswers.map(async (answer) => {
+  const question = await Question.findById(answer.questionId).select('correctAnswer');
+  return {
+    isCorrect: question.correctAnswer === answer.userChoice,
+    questionId: answer.questionId,
+  };
+}));
+
+// validation code on client----------------
+const questions = await Question.find({ quizId: quizId }).select('text choices correctAnswer');
+
+// database model---------------------
+{
+  "_id": ObjectId("your_generated_id"),
+  "quizId": ObjectId("quiz_id_reference"),
+  "text": "What is the capital of Bangladesh?",
+  "choices": ["A. Dhaka", "B. Jashore", "C. Khulna", "D. Barishal"],
+  "correctAnswer": "A"
+}
