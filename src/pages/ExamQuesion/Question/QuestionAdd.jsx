@@ -1,10 +1,6 @@
 import { useState } from 'react';
 import Select from 'react-select';
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+
 
 const QuestionAdd = () => {
   const [selectedSubject, setSelectedSubject] = useState([]);
@@ -21,8 +17,9 @@ const QuestionAdd = () => {
     const answer = form.answer.value;
     const note = form.note.value;
     const exam = form.SelectedExam.value;
-    const subject = selectedSubject.map((subject) => subject.value);
-    const questionData = { exam, subject, note, question, optionA, optionB, optionC, optionD, answer }
+    const examSub = form.examSub.value;
+    // const Selectsubject = selectedSubject.map((subject) => subject.value);
+    const questionData = { exam,examSub,  note, question, optionA, optionB, optionC, optionD, answer }
     console.log(questionData)
 
 
@@ -38,7 +35,7 @@ const QuestionAdd = () => {
           <div className="flex gap-4 p-5">
             <div className="input-group">
               <select name="SelectedExam" className="select select-bordered w-full">
-                <option disabled selected>Select Exam</option>
+                <option  disabled selected>Select Exam</option>
                 <option>T-shirts</option>
                 <option>Mugs</option>
               </select>
@@ -57,18 +54,22 @@ const QuestionAdd = () => {
           </div>
 
           {/* questin part */}
-          <div className="flex mt-3 d">
-            <label className="label">
+          <div className="flex mt-3 gap-4">
+          <div className='w-full'>
+          <label className="label">
               <span className="label-text md:text-[20px] font-bold">Question Title</span>
             </label>
             <input type="text" placeholder="Question" name="question" className="input input-bordered w-full" />
-            <label className="label">
+          </div>
+           <div className='w-full'>
+           <label className="label">
               <span className="label-text md:text-[20px] font-bold">Question Subject</span>
               </label>
-            <select name="SelectedExam" className="select select-bordered w-full">
+            <select name="examSub" className="select select-bordered w-full">
               <option disabled selected>Select Subject</option>
               <option>T-shirts</option>
             </select>
+           </div>
           </div>
           {/* question */}
           <div className="mt-1">

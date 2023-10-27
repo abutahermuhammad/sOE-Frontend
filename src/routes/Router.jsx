@@ -7,6 +7,7 @@ import Home from "../pages/shared/Homes/Home";
 import Login from "../pages/shared/Login/Login";
 import SignUp from "../pages/shared/SignUp/SignUp";
 import QuestionAdd from "../pages/ExamQuesion/Question/QuestionAdd";
+import ExamCreate from "../pages/ExamQuesion/Exam/ExamCreate";
 
 const routes = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const routes = createBrowserRouter([
   {
     path:'/addquestion',
     element:<QuestionAdd/>
+  },
+  {
+    path:'/exam_create',
+    element:<ExamCreate/>
   }
 ])
 
