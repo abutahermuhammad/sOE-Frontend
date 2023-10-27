@@ -9,12 +9,37 @@ const options = [
 
 const ExamCreate = () => {
   const [selectedSubject, setSelectedSubject] = useState([]);
-  const [selectTime, SetSelectTime] = useState(new Date())
+  // const [selectTime, SetSelectTime] = useState(new Date())
   // time inputed state here
   const [timeInput, setTimeInput] = useState("00:00:00");
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [mcq, setmcq] = useState(null);
+  const [mTotal, setMTotal] = useState(null);
+  // const [wmarks, setwmarks] = useState(null);
+  const [inTotal, setinTotal] = useState(null);
+  // console.log(mcq)
+  // console.log(mMark)
+
+
+  const handleTotalMcqMark = (e) => {
+    const newMMark = e.target.value;
+    const newMTotal = newMMark * mcq;
+    setinTotal(newMTotal);
+    setMTotal(newMTotal);
+
+    recalculateTotal(newMTotal, allTotal);
+  };
+  
+  const handleIntotalMarks = (e) => {
+    const newAllTotal = parseInt(e.target.value);
+    setinTotal(newAllTotal);
+    recalculateTotal(mTotal, newAllTotal);
+  };
+  
+  const recalculateTotal = (newMTotal, newAllTotal) => {
+    // Recalculate the total based on newMTotal and newAllTotal
+    const total = newMTotal + newAllTotal;
+    setinTotal(total);
+  };
 
   const handleTimeInputChange = (event) => {
     const value = event.target.value;
@@ -23,11 +48,11 @@ const ExamCreate = () => {
 
     // Parse the input and update hours, minutes, and seconds
     const [h, m, s] = value.split(":").map(Number);
-    setHours(h);
-    setMinutes(m);
-    setSeconds(s);
-    const time ={h,m,s}
-    
+    // setHours(h);
+    // setMinutes(m);
+    // setSeconds(s);
+    const time = { h, m, s }
+
     console.log("time after", time)
   }
 
@@ -91,14 +116,20 @@ const ExamCreate = () => {
                 <label className="label">
                   <span className="label-text font-bold"> Total MCQ Question</span>
                 </label>
-                <input type="text" name="optionA" placeholder="option" className="input input-bordered  w-full" />
+                <input type="number" name="totalmcq" placeholder="Total MCQ"
+                  value={mcq}
+                  onChange={(event) => setmcq(parseInt(event.target.value))}
+                  className="input input-bordered  w-full" />
               </div>
               {/*  */}
               <div className="w-full">
                 <label className="label">
                   <span className="label-text font-bold"> Per Question Mark </span>
                 </label>
-                <input type="text" name="optionA" placeholder="option" className="input input-bordered  w-full" />
+                <input type="number" name="mcqmark" placeholder="Mark"
+
+                  onChange={handleTotalMcqMark}
+                  className="input input-bordered  w-full" />
               </div>
 
             </div>
@@ -112,14 +143,16 @@ const ExamCreate = () => {
               <label className="label">
                 <span className="label-text font-bold"> (MCQ) Total Mark </span>
               </label>
-              <input readOnly type="text" name="optionA" placeholder="Total Mark" className="input input-bordered bg-slate-200  w-full" />
+              <input readOnly type="number" name="totalmcqmark"
+                value={mTotal}
+                placeholder="Total Mark" className="input input-bordered bg-slate-200  w-full" />
             </div>
             {/*  */}
             <div className="w-full">
               <label className="label">
                 <span className="label-text font-bold"> (MCQ) Per question <span className="text-red-500">Negative</span> mark </span>
               </label>
-              <input type="text" name="optionA" placeholder="option" className="input input-bordered  w-full" />
+              <input type="number" name="negative" placeholder="Negative Mark" className="input input-bordered  w-full" />
             </div>
 
           </div>
@@ -130,39 +163,37 @@ const ExamCreate = () => {
               <label className="label">
                 <span className="label-text font-bold"> Written Mark</span>
               </label>
-              <input type="text" name="optionA" placeholder="option" className="input input-bordered  w-full" />
+              <input type="number" name="writtenmark" placeholder="written"
+              
+              onChange={handleIntotalMarks}
+              className="input input-bordered  w-full" />
             </div>
             {/*  */}
             <div className="w-full">
               <label className="label">
                 <span className="label-text font-bold"> Total Marks </span>
               </label>
-              <input readOnly type="text" name="optionA" placeholder="In Total" className="input input-bordered bg-slate-200  w-full" />
+              <input readOnly type="number" name="totalmarks" 
+              placeholder="In Total"
+              value={inTotal}
+               className="input input-bordered bg-slate-200  w-full" />
             </div>
 
           </div>
           {/* 4 */}
-         {/* <TimeInputForm/> */}
 
-         <div className='w-full'>
-          <label className="label">
-                <span className="label-text font-bold"> Time (HH:MM:SS): </span>
-              </label>
-          
-          {/* <input
-            type="text"
-           
-            value={this.state.timeInput}
-            onChange={this.handleTimeInputChange} 
-            
-          /> */}
-           <input
-          type="text"
-          className="input input-bordered w-full"
-          value={timeInput}
-          onChange={handleTimeInputChange}
-        />
-       <div className="flex item-center gap-5">
+
+          <div className='w-full'>
+            <label className="label">
+              <span className="label-text font-bold"> Time (HH:MM:SS): </span>
+            </label>
+            <input
+              type="text"
+              className="input input-bordered w-full"
+              value={timeInput}
+              onChange={handleTimeInputChange}
+            />
+            {/* <div className="flex item-center gap-5">
        <div>
         <strong>Hours:</strong> {hours}
       </div>
@@ -173,10 +204,10 @@ const ExamCreate = () => {
         <strong>Seconds:</strong> {seconds}
       </div>
        </div>
-   
-        
-      </div>
-          
+    */}
+
+          </div>
+
           <div className="form-control mt-6">
             <button className="btn btn-primary">Submit</button>
           </div>
