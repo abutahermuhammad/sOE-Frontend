@@ -1,4 +1,5 @@
 import Coureses from "./courese/Coureses";
+import FreeSection from "./FreeSection/FreeSection";
 import Mentors from "./mentors/Mentors";
 import Slides from "./Slides";
 import Success from "./Success/Success";
@@ -9,10 +10,11 @@ const Home = () => {
   return (
     <div>
       <Slides/>
-      <Mentors/>
       <Coureses/>
+      <Mentors/>
       <ChooseUs/>
       <Success/>
+      <FreeSection/>
     </div>
   );
 };

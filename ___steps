@@ -124,3 +124,164 @@ class TimeInput extends Component {
 }
 
 export default TimeInput;
+
+// restrict multiple
+// Assuming you have a sessions collection in MongoDB
+const sessionsCollection = db.collection('sessions'); // Replace with your actual collection name
+
+function restrictMultipleLogins(req, res, next) {
+  if (req.isAuthenticated()) {
+    // Find active sessions for the current user
+    sessionsCollection.findOne({ userId: req.user._id, active: true }, (err, session) => {
+      if (err) {
+        console.error('Error checking active sessions:', err);
+        return res.redirect('/login'); // Handle the error as per your application's requirements
+      }
+
+      if (session) {
+        // If an active session exists, log out the user from the previous session
+        req.logout();
+        return res.redirect('/login');
+      }
+
+      // If no active session exists, continue with the current request
+      next();
+    });
+  } else {
+    next();
+  }
+}
+
+// Assuming you have a sessions collection in MongoDB
+const sessionsCollection = db.collection('sessions'); // Replace with your actual collection name
+
+function restrictMultipleLogins(req, res, next) {
+  if (req.isAuthenticated()) {
+    // Find active sessions for the current user
+    sessionsCollection.findOne({ userId: req.user._id, active: true }, (err, session) => {
+      if (err) {
+        console.error('Error checking active sessions:', err);
+        return res.redirect('/login'); // Handle the error as per your application's requirements
+      }
+
+      if (session) {
+        // If an active session exists, prevent the new login
+        return res.status(403).send('Multiple logins are not allowed.'); // You can customize the error message and response code
+      }
+
+      // If no active session exists, continue with the current request
+      next();
+    });
+  } else {
+    next();
+  }
+}
+
+
+const express = require('express');
+const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const MongoClient = require('mongodb').MongoClient;
+const bcrypt = require('bcrypt'); // For password hashing
+const uid = require('uid-safe'); // For generating unique session keys
+
+const app = express();
+
+// Replace with your MongoDB connection URI
+const mongoURI = 'mongodb://localhost:27017/myapp';
+
+// Connect to MongoDB
+MongoClient.connect(mongoURI, { useNewUrlParser: true })
+  .then(client => {
+    const db = client.db();
+    const usersCollection = db.collection('users'); // Use your MongoDB collection name for users
+    const sessionsCollection = db.collection('sessions'); // Use your MongoDB collection name for sessions
+
+    // Configure session middleware
+    app.use(session({
+      secret: 'your-secret-key', // Replace with a strong, unique secret key
+      resave: false,
+      saveUninitialized: true,
+    }));
+
+    // Initialize Passport for user authentication
+    app.use(passport.initialize());
+    app.use(passport.session());
+
+    // Configure Passport to use a LocalStrategy for user authentication
+    passport.use(new LocalStrategy(
+      function(username, password, done) {
+        usersCollection.findOne({ username: username }, function(err, user) {
+          if (err) { return done(err); }
+          if (!user) { return done(null, false); }
+          if (!bcrypt.compareSync(password, user.password)) { return done(null, false); }
+          return done(null, user);
+        });
+      }
+    ));
+
+    // Serialize user object to store in the session
+    passport.serializeUser(function(user, done) {
+      done(null, user._id);
+    });
+
+    // Deserialize user object from the session
+    passport.deserializeUser(function(id, done) {
+      usersCollection.findOne({ _id: id }, function(err, user) {
+        done(err, user);
+      });
+    });
+
+    // Route to handle user login
+    app.post('/login', passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }));
+
+    // Route to handle user logout
+    app.get('/logout', function(req, res) {
+      req.logout();
+      res.redirect('/');
+    });
+
+    // Function to generate a session key
+    function generateSessionKey() {
+      return uid.sync(24); // Generates a 24-character unique session key
+    }
+
+    // Middleware to restrict multiple device logins
+    function restrictMultipleLogins(req, res, next) {
+      if (req.isAuthenticated()) {
+        const sessionKey = req.sessionID;
+
+        // Look up the session key in the database
+        sessionsCollection.findOne({ sessionKey: sessionKey }, (err, session) => {
+          if (err) {
+            console.error('Error checking session:', err);
+            return res.redirect('/login');
+          }
+
+          if (!session || session.expired) {
+            // The session does not exist or has expired
+            // Handle it as needed (e.g., log the user out or deny access)
+            req.logout();
+            return res.redirect('/login');
+          }
+
+          next();
+        });
+      } else {
+        next();
+      }
+    }
+
+    // Apply the restrictMultipleLogins middleware to relevant routes
+    app.get('/dashboard', restrictMultipleLogins, function(req, res) {
+      res.send('Welcome to the dashboard!');
+    });
+
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
+    });
+  })
+  .catch(err => {
+    console.error('Error connecting to MongoDB:', err);
+  });

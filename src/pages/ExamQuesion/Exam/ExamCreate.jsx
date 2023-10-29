@@ -9,23 +9,19 @@ const options = [
 
 const ExamCreate = () => {
   const [selectedSubject, setSelectedSubject] = useState([]);
-  // const [selectTime, SetSelectTime] = useState(new Date())
+  const [selectTime, SetSelectTime] = useState(null)
   // time inputed state here
   const [timeInput, setTimeInput] = useState("00:00:00");
   const [mcq, setmcq] = useState(null);
   const [mTotal, setMTotal] = useState(null);
   // const [wmarks, setwmarks] = useState(null);
   const [inTotal, setinTotal] = useState(null);
-  // console.log(mcq)
-  // console.log(mMark)
-
 
   const handleTotalMcqMark = (e) => {
     const newMMark = e.target.value;
     const newMTotal = newMMark * mcq;
     setinTotal(newMTotal);
     setMTotal(newMTotal);
-
     recalculateTotal(newMTotal, allTotal);
   };
   
@@ -44,22 +40,29 @@ const ExamCreate = () => {
   const handleTimeInputChange = (event) => {
     const value = event.target.value;
     setTimeInput(value);
-    console.log(value)
-
-    // Parse the input and update hours, minutes, and seconds
+        // Parse the input and update hours, minutes, and seconds
     const [h, m, s] = value.split(":").map(Number);
-    // setHours(h);
-    // setMinutes(m);
-    // setSeconds(s);
-    const time = { h, m, s }
-
-    console.log("time after", time)
+       const time = { h, m, s }
+       SetSelectTime(time);
+    
   }
 
   // ended
   const handleAddExam = event => {
     event.preventDefault();
-    console.log(first)
+   const form = event.target;
+   const examName = form.examname.value;
+   const examSub = selectedSubject.map(item => item.value);
+   const mcqQsn = mcq;
+   const mcqNumber = parseFloat(form.mcqmark.value);
+   const McqMarkTotal = mTotal;
+   const negativeMark = parseFloat(form.negative.value);
+   const writtenmark = parseFloat(form.writtenmark.value);
+   const inToalMark = inTotal;
+   const examTime = selectTime;
+
+const examData={examName,examSub,mcqQsn,mcqNumber,McqMarkTotal,negativeMark,writtenmark,inToalMark,examTime }
+console.log(examData)
   }
 
   return (
@@ -77,7 +80,31 @@ const ExamCreate = () => {
               </select>
 
             </div>
-            <div className="input-group">
+            {/* <div className="input-group">
+              <Select className='w-full'
+                value={selectedSubject}
+                onChange={setSelectedSubject}
+                options={options}
+                isMulti
+                name='SelectedSubject'
+              />
+
+            </div> */}
+          </div>
+
+          {/* questin part */}
+          <div className="flex mt-3 gap-4">
+            <div className='w-full'>
+              <label className="label">
+                <span className="label-text font-bold">Exam Name</span>
+              </label>
+              <input type="text" placeholder="Exam Name" name="examname" className="input input-bordered w-full" />
+            </div>
+            <div className='w-full'>
+              <label className="label">
+                <span className="label-text  font-bold">Question Subject</span>
+              </label>
+              <div className="input-group">
               <Select className='w-full'
                 value={selectedSubject}
                 onChange={setSelectedSubject}
@@ -87,27 +114,9 @@ const ExamCreate = () => {
               />
 
             </div>
-          </div>
-
-          {/* questin part */}
-          <div className="flex mt-3 gap-4">
-            <div className='w-full'>
-              <label className="label">
-                <span className="label-text font-bold">Exam Name</span>
-              </label>
-              <input type="text" placeholder="Exam Name" name="Exam" className="input input-bordered w-full" />
-            </div>
-            <div className='w-full'>
-              <label className="label">
-                <span className="label-text  font-bold">Question Subject</span>
-              </label>
-              <select name="examSub" className="select select-bordered w-full">
-                <option disabled selected>Select Subject</option>
-                <option>T-shirts</option>
-              </select>
             </div>
           </div>
-          {/* question */}
+       
           <div className="mt-1">
 
             <div className="flex items-center gap-x-3 ">
@@ -152,7 +161,7 @@ const ExamCreate = () => {
               <label className="label">
                 <span className="label-text font-bold"> (MCQ) Per question <span className="text-red-500">Negative</span> mark </span>
               </label>
-              <input type="number" name="negative" placeholder="Negative Mark" className="input input-bordered  w-full" />
+              <input type="text" name="negative" placeholder="Negative Mark" className="input input-bordered  w-full" />
             </div>
 
           </div>
@@ -219,3 +228,4 @@ const ExamCreate = () => {
 };
 
 export default ExamCreate;
+
