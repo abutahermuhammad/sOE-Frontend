@@ -9,7 +9,7 @@ import { AuthContext } from "../../../provider/AuthProvider";
 // import typing from "../../../../public/typing.json"
 const Login = () => {
 const navigate = useNavigate();
-  const {user, error, login} = useContext(AuthContext);
+  const {user, error, login,loading} = useContext(AuthContext);
 
   const handleLogin = async(event) =>{
     event.preventDefault();
@@ -19,7 +19,7 @@ const navigate = useNavigate();
 
 await login(phone,password)
 
-if(user.status == "invalid User"){
+if(user?.status == "invalid User"){
   navigate('/login')
 }
 // else{
@@ -36,7 +36,8 @@ console.log("log user", user)
 
     {/* ---- */}
 
-    <div className="hero min-h-screen ">
+    {
+      loading? <p>loading.. </p> :<div className="hero min-h-screen ">
       <div className="hero-content flex-col lg:flex-row ">
         <div className="text-center lg:text-left">
 
@@ -77,6 +78,7 @@ console.log("log user", user)
         </div>
       </div>
     </div>
+    }
 
   </div>
   );

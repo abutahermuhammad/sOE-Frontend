@@ -8,12 +8,12 @@ const ChooseUs = () => {
     Aos.init({ duration: 800 });
   }, []);
   return (
-    <div className="bg-[#1E234E]   md:h-72 ">
-      <h1>Why Choose Us !</h1>
+    <div className="bg-[#060b30]   md:h-72 ">
+    
       <div className="md:flex justify-between items-center md:container mx-auto  bg-gradient-to-t from-[#020957]  to-[#050936]   p-10 pb-4 rounded-2xl shadow-lg">
         <section className=" ">
           <h1
-          className="text-white text-center font-bold text-3xl"> কেন SoE- তে আস্থা রাখবে ! </h1>
+          className="text-white text-center font-bold text-3xl"> কেন SoE- তে <span className='text-green-500'>আস্থা</span> রাখবে ! </h1>
           <p className="text-[#d6d4e6] text-[20px] pt-3">শিক্ষার্থীদের কল্যাণে মানসম্মত পাঠদান করানো আমাদের উদ্দেশ্য।</p>
         </section >
         {/* section 2 */}

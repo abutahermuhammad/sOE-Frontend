@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 
@@ -23,15 +24,24 @@ const FreeSection = () => {
         </div>
 
         <TabPanel className="text-white">
+          <Link to='/free_class'>
           <div>
             <h2>Our Free Class is here</h2>
-          </div>
+          </div></Link>
         </TabPanel>
         <TabPanel className="text-white">
+          <Link to="/free_materials">
+          <div>
           <h2>Our Free Materials is here</h2>
+          </div>
+          </Link>
         </TabPanel>
         <TabPanel className="text-white">
+          <Link to="/free_exam">
+          <div>
           <h2>Our Free Exam is here</h2>
+          </div>
+          </Link>
         </TabPanel>
       </Tabs>
     </div>

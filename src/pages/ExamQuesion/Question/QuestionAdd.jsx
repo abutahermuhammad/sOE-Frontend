@@ -26,7 +26,7 @@ const QuestionAdd = () => {
 
   }
   return (
-    <div className='bg-[#8394e2]'>
+    <div className='bg-[#8394e2] w-full mx-4'>
       <h1 className="text-center text-2xl my-4 font-bold p-5 ">Add Your question</h1>
       <hr />
       <div className="container mx-auto">

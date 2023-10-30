@@ -6,9 +6,13 @@ import { AuthContext } from "../../../provider/AuthProvider";
 const Headers = () => {
   const { user,logOut } = useContext(AuthContext);
 
+ 
+  console.log(user)
+
+console.log("user frm ", user)
   // handle logout
   const handleLogOut = () =>{
-    logOut();
+   logOut()
   }
 
   return (
@@ -20,21 +24,17 @@ const Headers = () => {
 
           </label>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-[#000324] rounded-box w-52">
-            <li><Link to="/service">Courses</Link></li>
-            <li> <Link to="/doctor">Mentors</Link> </li>
+            <li><Link to="/course">Courses</Link></li>
+            <li> <Link to="/mentor">Mentors</Link> </li>
             <li> <Link> Career </Link> </li>
             {/* todo user routes conditionally show the routes only when user is login or user isAuthencitaed */}
             {
-              user?.isAuthencitaed && (
-                <>
-                  <li className=" hover:bg-white rounded-md hover:font-semibold ">
-                    <Link to="/dashboard"> Dashboard </Link> </li>
-                  
-                </>
-              )
-
-
-            }
+          user?.isAuthenticated && (
+            <li className="hover:bg-white rounded-md hover:font-semibold">
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+          )
+        }
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case md:text-xl">
@@ -46,22 +46,18 @@ const Headers = () => {
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1 text-[20px] ">
           <li className="hover:bg-white rounded-md hover:font-semibold">
-            <Link to="/service"> Courses </Link></li>
+            <Link to="/course"> Courses </Link></li>
 
           <li className="hover:bg-white rounded-md hover:font-semibold">
-            <Link to="/doctor">Mentors</Link> </li>
+            <Link to="/mentor">Mentors</Link> </li>
           <li className="hover:bg-white rounded-md hover:font-semibold "> <Link> Career </Link> </li>
           {
-              user?.isAuthencitaed && (
-                <>
-                  <li className=" hover:bg-white rounded-md hover:font-semibold ">
-                    <Link to="/dashboard"> Dashboard </Link> </li>
-                 
-                </>
-              )
-
-
-            }
+          user?.isAuthenticated && (
+            <li className="hover:bg-white rounded-md hover:font-semibold">
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+          )
+        }
         </ul>
       </div>
 
@@ -70,7 +66,7 @@ const Headers = () => {
         <div>
           {/* todo user routes conditionally */}
           {
-              user.isAuthencitaed ? 
+              user?.isAuthencitaed ? 
                 <button onClick={handleLogOut}  className="btn btn-ghost">Log Out</button>
                 : <>
                  <Link to='/login'>Login</Link></>
