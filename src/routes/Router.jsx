@@ -15,6 +15,7 @@ import Mentors from "../pages/shared/Homes/mentors/Mentors";
 import Coureses from "../pages/shared/Homes/courese/Coureses";
 import Sidebar from "../Dashboard/SideBar/SideBar";
 import Dashboard from "../Dashboard/Dashboard";
+import Exam from "../Dashboard/Exam/Exam";
 
 const routes = createBrowserRouter([
   {
@@ -53,6 +54,7 @@ const routes = createBrowserRouter([
         path:'free_materials',
         element:<MaterailsFree/>
       },
+     
     ],
     
   },
@@ -68,6 +70,10 @@ const routes = createBrowserRouter([
     {
       path:'addquestion',
       element:<QuestionAdd/>
+    },
+    {
+      path:'exam',
+      element:<Exam/>
     },
   ]
 },

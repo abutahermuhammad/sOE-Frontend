@@ -1,19 +1,22 @@
-import { useState } from "react";
+
 import { Link, NavLink, Outlet } from "react-router-dom";
-import QuestionAdd from "../../pages/ExamQuesion/Question/QuestionAdd";
+
+import { useContext } from "react";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const Sidebar = () => {
-
+  const { user, logOut } = useContext(AuthContext)
+  const handleLogOut = () => {
+    logOut();
+  }
 
   return (
-    <div>
+    <div className="text-[16px]">
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-start w-full bg-white">
           {/* Page content here */}
-          <div>
-            <h1>আমার রুটিন</h1>
-          </div>
+
 
           <div className="absolute left-5 dropdown">
             <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -39,45 +42,53 @@ const Sidebar = () => {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 min-h-full bg-blue-200 text-base-content">
+          <ul className="menu p-4 w-80 min-h-full bg-gradient-to-t from-[#020957]  to-[#050936]  text-white">
             {/* Sidebar content here */}
             <div className="flex flex-col items-center">
               <h1 className="text-xl font-semibold py-4">Dashboard</h1>
-              {/* <img className="mask mask-circle w-24 h-24 border-4 border-purple-500 rounded-full " src={user?.photoURL} alt="Image" /> */}
-              {/* 
+              <img className="mask mask-circle w-24 h-24 border-4 border-purple-500 rounded-full " src={user?.photoURL} alt="Photo " />
+
               <div className="indicator mt-5">
-                <span className="indicator-item badge badge-secondary">{currentUser?.role}</span>
-                <h3 className="mt-1 mr-5 text-[20px]"> {user?.displayName} </h3>
-              </div> */}
+
+                <h3 className="mt-1 mr-5 text-[20px]"> {user?.name} </h3>
+              </div>
 
             </div>
 
             <div className="divider"></div>
-            {/* {
-              currentUser && currentUser.role == 'admin' &&
-              <div>
-                <li><NavLink to='/dashboard/manageuser'>Manage User</NavLink>  </li>
-                <li> <NavLink to="/dashboard/managedoctor"> Manage Doctor </NavLink> </li>
-                <li> <NavLink to="/dashboard/manageservice"> Manage Service </NavLink> </li>
-                <li> <NavLink to="/dashboard/incomeledger"> Income Ledger
-                </NavLink> </li>
-              </div>} */}
-            {/* {
-              currentUser && currentUser.role === 'owner' &&
-              <div>
-                <li> <NavLink to="/dashboard/managedoctor"> Manage Doctor </NavLink> </li>
-                <li> <NavLink to="/dashboard/incomeledger"> Income Ledger
-                </NavLink> </li>
-              </div>
-            } */}
-            {/* {
-              currentUser && currentUser.role === 'staff' &&
-              <div>
+            <div className="text-[16px]">
+              <li><NavLink to='/dashboard/home'>Dashboard</NavLink></li>
+              <ul className="menu menu-horizontal px-1 text-[16px] ">
+                <li tabIndex={0}>
+                  <details>
+                    <summary>Exam</summary>
+                    <ul className="dropdown-content z-[1] menu shadow bg-[#020957] rounded-box w-52 text-white">
+                      <li><NavLink to='/dashboard/exam'>Exam</NavLink></li>
+                      <li><NavLink to='/'>Touch Mentors</NavLink></li>
 
-                <li> <NavLink to="/dashboard/incomeledger"> Income Ledger
-                </NavLink> </li>
-              </div>
-            } */}
+                    </ul>
+                  </details>
+                </li>
+
+              </ul>
+
+              <li><NavLink to='/'>Payment</NavLink></li>
+              <li><NavLink to='/'>Community</NavLink></li>
+              <li><NavLink to='/'>Leaderboard</NavLink></li>
+              <ul className="menu menu-horizontal px-1 text-[16px]">
+                <li tabIndex={0}>
+                  <details>
+                    <summary>Support</summary>
+                    <ul className="dropdown-content z-[1] menu shadow bg-[#020957] rounded-box w-52 text-white">
+                      <li><NavLink to='/'>Doubt Clear</NavLink></li>
+                      <li><NavLink to='/'>Touch Mentors</NavLink></li>
+
+                    </ul>
+                  </details>
+                </li>
+
+              </ul>
+            </div>
 
 
             {/* divider */}
@@ -89,7 +100,7 @@ const Sidebar = () => {
               <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
                 <li className="bg-[#2048ca] rounded-md text-white"><a>Change Password</a></li>
                 <li className="bg-[#b2163d] rounded-md text-white mt-2">
-                  {/* <button onClick={handleLogOut}>Log Out</button> */}
+                  <button onClick={handleLogOut}>Log Out</button>
                 </li>
               </ul>
             </div>

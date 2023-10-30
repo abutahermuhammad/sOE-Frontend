@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
       setUser({ isAuthenticated: true });
     }
     setLoading(false);
-    console.log(isAuthenticated)
+  
 
   }, []);
   console.log("from provide",user)
@@ -41,7 +41,7 @@ const AuthProvider = ({ children }) => {
           setUser({ isAuthenticated: false })
         }
         else if (data.status == 'valid User') {
-          setUser({isAuthenticated:true})
+          setUser({isAuthenticated:true},data)
           localStorage.setItem("isAuthenticated", "true");
           setLoading(false);
           
@@ -53,7 +53,7 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     loading
-    // setUser({ isAuthencitaed: false })
+    setUser({ isAuthencitaed: false })
     localStorage.removeItem('isAuthenticated')
   }
 

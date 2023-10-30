@@ -66,7 +66,7 @@ console.log("user frm ", user)
         <div>
           {/* todo user routes conditionally */}
           {
-              user?.isAuthencitaed ? 
+              user?.isAuthenticated ? 
                 <button onClick={handleLogOut}  className="btn btn-ghost">Log Out</button>
                 : <>
                  <Link to='/login'>Login</Link></>
