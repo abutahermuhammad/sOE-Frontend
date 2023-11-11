@@ -64,17 +64,48 @@ const Sidebar = () => {
                     <summary>Exam</summary>
                     <ul className="dropdown-content z-[1] menu shadow bg-[#020957] rounded-box w-52 text-white">
                       <li><NavLink to='/dashboard/exam'>Exam</NavLink></li>
-                      <li><NavLink to='/'>Touch Mentors</NavLink></li>
+                      <li><NavLink to='/'>Previous Exam</NavLink></li>
+                      <li><NavLink to='/'>Random Exam</NavLink></li>
 
                     </ul>
                   </details>
                 </li>
 
               </ul>
-
+              
               <li><NavLink to='/'>Payment</NavLink></li>
+              <ul className="menu menu-horizontal px-1 text-[16px] ">
+                <li tabIndex={0}>
+                  <details>
+                    <summary>Class</summary>
+                    <ul className="dropdown-content z-[1] menu shadow bg-[#020957] rounded-box w-52 text-white">
+                      <li><NavLink to='/dashboard/exam'>Class</NavLink></li>
+                      <li><NavLink to='/'>Previous Class</NavLink></li>
+                      {/* <li><NavLink to='/'>Random Exam</NavLink></li> */}
+
+                    </ul>
+                  </details>
+                </li>
+
+              </ul>
               <li><NavLink to='/'>Community</NavLink></li>
-              <li><NavLink to='/'>Leaderboard</NavLink></li>
+              <ul className="menu menu-horizontal px-1 text-[16px] ">
+                <li tabIndex={0}>
+                  <details>
+                    <summary>Leaderboard</summary>
+                    <ul className="dropdown-content z-[1] menu shadow bg-[#020957] rounded-box w-52 text-white">
+                      <li><NavLink to='/dashboard/exam'>Top Leader</NavLink></li>
+                      <li><NavLink to='/'>Your Progress</NavLink></li>
+                      {/* <li><NavLink to='/'>Random Exam</NavLink></li> */}
+
+                    </ul>
+                  </details>
+                </li>
+
+              </ul>
+              <li>              
+              </li>
+
               <ul className="menu menu-horizontal px-1 text-[16px]">
                 <li tabIndex={0}>
                   <details>

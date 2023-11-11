@@ -16,7 +16,7 @@ console.log("user frm ", user)
   }
 
   return (
-    <div className="navbar  bg-[#140e4d] bg-opacity-30 fixed top-0 z-20 text-[20px] text-white  ">
+    <div className="navbar bg-[#140e4d] bg-opacity-30 fixed top-0 z-20 md:text-[20px] text-white ">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -38,7 +38,7 @@ console.log("user frm ", user)
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case md:text-xl">
-          <img className="h-12" src="/public/soe.png" alt="" />
+          <img className="md:h-12 h-4" src="/public/soe.png" alt="" />
         </Link>
       </div>
 

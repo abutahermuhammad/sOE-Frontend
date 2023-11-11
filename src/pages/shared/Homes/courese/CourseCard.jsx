@@ -1,8 +1,15 @@
 import { useEffect } from "react";
 import 'aos/dist/aos.css';
 import Aos from "aos";
+import Button from "../../../../Components/Button";
+import { TbCurrencyTaka } from "react-icons/tb";
 
-const CourseCard = () => {
+const CourseCard = ({course}) => {
+const enroll= "Enroll Now"
+const details= "Details"
+
+  const {name, fees, photoUrls, _id, descripton } = course;
+  console.log("form cours car", course)
   useEffect(() => {
     // Initialize AOS when the component mounts
     Aos.init({ duration: 800 });
@@ -14,11 +21,19 @@ const CourseCard = () => {
       data-aos-duration="1200"
       className="card w-80 bg-[#0a1049] text-white shadow-[#05092d] shadow-lg hover:border border-blue-500 transition group  ">
       <figure className="px-10 pt-10">
-        <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Mentors" className="rounded-xl group-hover:-translate-y-4 transition" />
+        <img src={photoUrls} alt="Mentors" className="rounded-xl h-[160px] w-full group-hover:-translate-y-4 transition" />
       </figure>
       <div className="card-body items-center text-center">
-        <h2 className="card-title">Moudud Hasan</h2>
-        <p className="text-green-600 text-lg">C E O</p>
+        <h2 className="card-title text-2xl">{name}</h2>
+        <p className="text-lg flex items-center ">মাত্র ‍<span className="text-green-600 text-lg flex items-center">
+          <TbCurrencyTaka/>{fees}</span> </p>
+          <p>{descripton}</p>
+
+        <div className="flex item-center justify-between gap-5">
+     
+        <Button buttonText={enroll} />
+        <Button buttonText={details} />
+        </div>
 
       </div>
     </div>

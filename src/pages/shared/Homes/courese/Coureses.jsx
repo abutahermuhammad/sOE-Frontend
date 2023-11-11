@@ -1,31 +1,22 @@
 import CourseCard from "./CourseCard";
 import './Course.css'
+import { useEffect, useState } from "react";
 
 
 const Coureses = () => {
-  // useEffect(() => {
-  //   const movingImage = document.getElementById("moving-image");
+const [courses, setCourses] = useState([])
 
-  //   const animateImage = () => {
-  //     const container = movingImage.parentElement;
-  //     const maxWidth = container.clientWidth - movingImage.clientWidth;
-  //     const maxHeight = container.clientHeight - movingImage.clientHeight;
-
-  //     const randomLeft = Math.random() * maxWidth;
-  //     const randomTop = Math.random() * maxHeight;
-
-  //     movingImage.style.left = `${randomLeft}px`;
-  //     movingImage.style.top = `${randomTop}px`;
-  //   };
-
-  //   animateImage();
-
-  //   // Animate the image every 3 seconds
-  //   setInterval(animateImage, 3000);
-  // }, []);
+useEffect( () =>{
+  fetch('http://localhost:5000/course-list')
+  .then(res => res.json())
+  .then(data => {
+    setCourses(data);
+    console.log("course",data)
+  })
+} ,[])
 
   return (
-    <div className="bg-gradient-to-tr from-[#000324]  to-[#101a77]  relative ">
+    <div className="bg-gradient-to-tr from-[#000324]  to-[#101a77] relative ">
       <img className="ping-slow absolute  right-3 w-12 top-8 animate-ping ainmate-2s list-item" src="https://i.ibb.co/vdX3wZ9/ring-shape-01-removebg-preview.png" alt="" />
       <img className="ping-slow absolute left-3 w-12 top-8 animate-ping ainmate-2s list-item" src="https://i.ibb.co/vdX3wZ9/ring-shape-01-removebg-preview.png" alt="" />
       <img className="ping-slow absolute right-56  w-16 top-8 animate-ping ainmate-2s list-item" src="https://i.ibb.co/vdX3wZ9/ring-shape-01-removebg-preview.png" alt="" />
@@ -49,7 +40,13 @@ const Coureses = () => {
        border-b-2 border-green-600 pt-10 pb-5 '>Our Courses</h1>
        {/* todo map course */}
        <div className="grid md:grid-cols-3 gap-6 py-10">
-        <CourseCard/>
+        {
+          courses?.map(course => <CourseCard
+          key={course._id}
+          course={course}
+          />)
+        }
+        {/* <CourseCard/> */}
        </div>
       </section>
     </div>

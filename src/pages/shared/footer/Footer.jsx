@@ -36,7 +36,7 @@ const Footer = () => {
 </footer> 
 <footer className="md:flex justify-evenly px-10 py-4 border-t bg-[#000324] text-[#B0ABDF]">
  <h1>@Copyright SoE 2023</h1>
- <h1>Developed by Jubair Abdullah</h1>
+ <h1>Developed by Novus IT</h1>
 </footer>
     </div>
   );

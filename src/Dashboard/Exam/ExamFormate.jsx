@@ -1,52 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const ExamFormate = ({ questions, questionNumber, onAnswerSelected }) => {
-  const { question, options } = questions;
-
-  const [selectedOption, setSelectedOption] = useState("");
-  const [answers, setAnswers] = useState({});
-
-  const handleAnswerSelection = (selectedAnswer) => {
-    // Update the selected answer for the current question in the `answers` state
-    setAnswers({
-      ...answers,
-      [questionNumber]: selectedAnswer,
-    });
-
-    // Notify the central component of the selected answer
-    onAnswerSelected(questionNumber, selectedAnswer);
+const QuestionComponent = ({ questions, questionNumber, onAnswerSelected }) => {
+  const { Answer, Option1, Option2, Option3, Option4, SL, Title, _id } = questions;
+  console.log("from formate", questions)
+  const options = {
+    A: Option1,
+    B: Option2,
+    C: Option3,
+    D: Option4,
   };
 
-  useEffect(() => {
-    console.log("Selected option:", answers);
-  }, [answers]);
+  const [selectedOption, setSelectedOption] = useState("");
 
   return (
-    <div className="p-3">
-      <h1>Question {questionNumber}: {question}</h1>
+    <div className="p-3 bg-white shadow-xl rounded-lg">
+      <h1 className="md:text-xl sm:text-[12px] md:font-bold rounded-md sm:font-semibold p-1 bg-slate-100">
+        Question {SL}: {Title}
+      </h1>
       <ul>
-        {Object.keys(options).map((optionLabel) => (
-          <li key={optionLabel}>
+        {Object.entries(options)?.map(([optionLabel, optionValue]) => (
+          <li
+            className={`border-2 border-slate-100 my-1 p-1 rounded-md ${
+              selectedOption === optionLabel ? " bg-purple-200 font-semibold text-[#050936]" : ""
+            }`}
+            key={optionLabel}
+          >
             <label>
               <input
                 type="radio"
-                name={`question-${questionNumber}`}
+                name={`question-${SL}`}
                 value={optionLabel}
                 checked={selectedOption === optionLabel}
                 onChange={() => {
                   setSelectedOption(optionLabel);
-                  handleAnswerSelection(optionLabel);
+                  onAnswerSelected(_id, optionLabel); // Fixed the prop name here
                 }}
                 disabled={!!selectedOption}
               />
-              {optionLabel}: {options[optionLabel]}
+              <span> {optionValue}</span>
             </label>
           </li>
         ))}
       </ul>
-      <p>Selected option: {selectedOption}</p>
+      <p className="text-[#050936] font-semibold">Selected option: {selectedOption}</p>
     </div>
   );
 };
 
-export default ExamFormate;
+export default QuestionComponent;
