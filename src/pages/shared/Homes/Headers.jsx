@@ -9,7 +9,7 @@ const Headers = () => {
  
   console.log(user)
 
-console.log("user frm ", user)
+// console.log("user frm ", user)
   // handle logout
   const handleLogOut = () =>{
    logOut()

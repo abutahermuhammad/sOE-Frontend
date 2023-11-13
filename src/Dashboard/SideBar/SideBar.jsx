@@ -5,10 +5,23 @@ import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
 
 const Sidebar = () => {
-  const { user, logOut } = useContext(AuthContext)
+  const { user, logOut,userInfo } = useContext(AuthContext)
+  console.log("usr ingo", userInfo)
   const handleLogOut = () => {
     logOut();
   }
+  const handleDashboard = () => {
+    console.log("click the dashboard")
+    fetch(`http://localhost:5000/dashoardDetails/${userInfo?.phone}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log("dashboard user", data);
+      })
+      .catch(error => {
+        console.error("Error fetching dashboard details:", error);
+      });
+  }
+  
 
   return (
     <div className="text-[16px]">
@@ -50,14 +63,14 @@ const Sidebar = () => {
 
               <div className="indicator mt-5">
 
-                <h3 className="mt-1 mr-5 text-[20px]"> {user?.name} </h3>
+                <h3 className="mt-1 mr-5 text-[20px]"> {userInfo?.name} </h3>
               </div>
 
             </div>
 
             <div className="divider"></div>
             <div className="text-[16px]">
-              <li><NavLink to='/dashboard/home'>Dashboard</NavLink></li>
+              <li><NavLink onClick={handleDashboard} to='/dashboard/home'>Dashboard</NavLink></li>
               <ul className="menu menu-horizontal px-1 text-[16px] ">
                 <li tabIndex={0}>
                   <details>

@@ -64,7 +64,7 @@ const routes = createBrowserRouter([
   element:<Sidebar/>,
   children:[
     {
-      path:'dashboard',
+      path:'home',
       element:<Dashboard/>
     },
    
