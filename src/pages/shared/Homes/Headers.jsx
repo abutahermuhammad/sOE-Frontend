@@ -65,7 +65,7 @@ const Headers = () => {
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case md:text-xl">
-          <img className="md:h-12 h-4" src="/public/soe.png" alt="" />
+          <img className="md:h-12 h-4" src="https://soe-course.s3.ap-south-1.amazonaws.com/soe.png" alt="" />
         </Link>
       </div>
 
