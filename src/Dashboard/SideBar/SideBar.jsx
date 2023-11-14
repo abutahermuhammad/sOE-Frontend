@@ -1,27 +1,91 @@
 
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { useContext } from "react";
 import { AuthContext } from "../../provider/AuthProvider";
+import { useEffect } from "react";
+import { useState } from "react";
+import MyCourseCard from "../../Components/MyCourseCard";
+import Spinner from "../../Components/Spinner";
 
 const Sidebar = () => {
-  const { user, logOut,userInfo } = useContext(AuthContext)
-  console.log("usr ingo", userInfo)
+  const { user, logOut, userInfo } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [dashboardData, setDashboardData] = useState([]);
+  const location = useLocation();
+
+  // useEffect(() => {
+  //   setLoadingUser(true);
+
+  //   fetch('http://localhost:5000/user_list')
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setUsers(data);
+  //       setLoadingUser(false); // Set loading to false once user data is fetched
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching user details:", error);
+  //       setLoadingUser(false); // Set loading to false in case of an error
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!loadingUser) {
+  //     const currentUserPhone = userInfo?.phone;
+  //     const currentUser = users.find((user) => user.phone === currentUserPhone);
+
+  //     if (currentUser) {
+  //       console.log("current user", currentUser);
+  //       // Filter and set dashboard data based on the currentUser
+  //       const filteredData = data.filter(item => item.phone === currentUserPhone);
+  //       setDashboardData(filteredData);
+  //     }
+  //   }
+  // }, [loadingUser, userInfo?.phone, users]);
+
+  useEffect(() => {
+    setLoadingUser(true);
+
+    // Fetch user data
+    fetch("http://localhost:5000/user_list")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        setLoadingUser(false); // Set loading to false once user data is fetched
+      })
+      .catch((error) => {
+        console.error("Error fetching user details:", error);
+        // setLoadingUser(false); // Set loading to false in case of an error
+      });
+  }, []);
+  const currentUserPhone = userInfo?.phone;
+  const currentUser = users.find((user) => user.phone === currentUserPhone);
+  useEffect(() => {
+
+    if (currentUser) {
+      console.log("current user", currentUser);
+      // Fetch dashboard data
+      fetch("http://localhost:5000/mycoureses")
+        .then((res) => res.json())
+        .then((data) => {
+
+          // Filter and set dashboard data based on the currentUser
+          const filteredData = data.filter(item => item.phone === currentUser.phone);
+          setDashboardData(filteredData);
+        })
+        .catch((error) => {
+          console.error("Error fetching dashboard details:", error);
+        });
+    }
+
+  }, [loadingUser, userInfo?.phone, users]);
+
   const handleLogOut = () => {
     logOut();
   }
-  const handleDashboard = () => {
-    console.log("click the dashboard")
-    fetch(`http://localhost:5000/dashoardDetails/${userInfo?.phone}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log("dashboard user", data);
-      })
-      .catch(error => {
-        console.error("Error fetching dashboard details:", error);
-      });
-  }
-  
+
+
 
   return (
     <div className="text-[16px]">
@@ -47,6 +111,30 @@ const Sidebar = () => {
               <li><a>Item 3</a></li>
             </ul>
           </div>
+          {/* dashoard content--------- */}
+          {location.pathname === '/dashboard' && (
+
+
+            <div className="w-full px-10 min-h-screen">
+              <h1 className="text-[40px] text-center py-2 rounded-lg my-3 font-semibold text-slate-50 bg-gradient-to-r from-blue-500 via-violet-800 to-[#140e4d] "> আমার কোর্স সমূহ  </h1>
+              {/* Rest of your component */}
+              <div className="mx-auto grid md:grid-cols-3 gap-5 ">
+                {dashboardData && dashboardData.length > 0 ? (
+                  dashboardData.map(mycourse => (
+                    <MyCourseCard key={mycourse._id} mycourse={mycourse} />
+                  ))
+                ) : (
+                  <div>
+                    <p  className="text-center text-red-500 text-2xl font-bold">No courses available. </p>
+                    <Link className="text-green-500" to="/">Go to Home</Link>
+                  </div>
+                )}
+
+              </div>
+
+            </div>
+
+          )}
 
           <Outlet />
 
@@ -70,7 +158,7 @@ const Sidebar = () => {
 
             <div className="divider"></div>
             <div className="text-[16px]">
-              <li><NavLink onClick={handleDashboard} to='/dashboard/home'>Dashboard</NavLink></li>
+              <li><NavLink to='/dashboard/home'>My Course</NavLink></li>
               <ul className="menu menu-horizontal px-1 text-[16px] ">
                 <li tabIndex={0}>
                   <details>
@@ -85,7 +173,7 @@ const Sidebar = () => {
                 </li>
 
               </ul>
-              
+
               <li><NavLink to='/'>Payment</NavLink></li>
               <ul className="menu menu-horizontal px-1 text-[16px] ">
                 <li tabIndex={0}>
@@ -116,7 +204,7 @@ const Sidebar = () => {
                 </li>
 
               </ul>
-              <li>              
+              <li>
               </li>
 
               <ul className="menu menu-horizontal px-1 text-[16px]">
@@ -157,6 +245,7 @@ const Sidebar = () => {
       </div>
     </div>
   );
+
 };
 
 export default Sidebar;

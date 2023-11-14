@@ -1,15 +1,42 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate   } from "react-router-dom";
 import { AuthContext } from "../../../provider/AuthProvider";
+import { FaFacebookMessenger } from "react-icons/fa6";
+import { useState } from "react";
+import { useEffect } from "react";
 
 
 const Headers = () => {
-  const { user,logOut } = useContext(AuthContext);
+  const { user,logOut,userInfo } = useContext(AuthContext);
+  const [isVisible, setIsVisible] = useState(false);
+  const navigate = useNavigate();
 
- 
-  console.log(user)
 
-// console.log("user frm ", user)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []); 
+
+
+  // const handleDashboard = () => {
+  //   console.log("cliked to dashboard")
+  //   fetch(`http://localhost:5000/dashboardDetails/${userInfo?.phone}`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       navigate("/dashboard", { state: { dashboardData: data } });
+  //       console.log("dashboard user from header", data);
+  //     })
+  //     .catch(error => {
+  //       console.error("Error fetching dashboard details:", error);
+  //     });
+  // };
+
+
+
+
   // handle logout
   const handleLogOut = () =>{
    logOut()
@@ -29,7 +56,7 @@ const Headers = () => {
             <li> <Link> Career </Link> </li>
             {/* todo user routes conditionally show the routes only when user is login or user isAuthencitaed */}
             {
-          user?.isAuthenticated && (
+          user?.isAuthenticated && userInfo?.phone && (
             <li className="hover:bg-white rounded-md hover:font-semibold">
               <Link to="/dashboard">Dashboard</Link>
             </li>
@@ -42,6 +69,15 @@ const Headers = () => {
         </Link>
       </div>
 
+      {isVisible && (
+       <>
+     
+        <div className="fixed top-1/2 transform -translate-y-1/2 right-0 flex items-center btn-grad  rounded-full shadow-md">
+          <FaFacebookMessenger className="text-white text-[20px] md:text-[30px]" />
+          
+        </div>
+       </>
+      )}
 
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1 text-[20px] ">
@@ -52,9 +88,9 @@ const Headers = () => {
             <Link to="/mentor">Mentors</Link> </li>
           <li className="hover:bg-white rounded-md hover:font-semibold "> <Link> Career </Link> </li>
           {
-          user?.isAuthenticated && (
+          user?.isAuthenticated && userInfo?.phone && (
             <li className="hover:bg-white rounded-md hover:font-semibold">
-              <Link to="/dashboard">Dashboard</Link>
+              <Link   to="/dashboard">Dashboard</Link>
             </li>
           )
         }

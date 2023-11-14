@@ -9,7 +9,7 @@ const enroll= "Enroll Now"
 const details= "Details"
 
   const {name, fees, photoUrls, _id, descripton } = course;
-  console.log("form cours car", course)
+
   useEffect(() => {
     // Initialize AOS when the component mounts
     Aos.init({ duration: 800 });

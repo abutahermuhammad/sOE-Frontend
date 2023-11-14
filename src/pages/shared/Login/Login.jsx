@@ -73,7 +73,7 @@ console.log("log user", user)
               </div>
 
             </form>
-            <p>New to Soe? <Link className="text-green-500" to="/"> sign up </Link> </p>
+            <p>New to Soe? <Link className="text-green-500" to="/signup"> sign up </Link> </p>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ const SignUp = () => {
       // console.log('doctor', data);
       if(data.message == "already exisit"){
         alert('Already Exists')
-        
+        reset();
        }
 
      else if (data.insertedId) {
@@ -41,8 +41,10 @@ const SignUp = () => {
           title: 'Added Successfully',
           showConfirmButton: false,
           timer: 1500
-        })
+    
+        })       
       }})
+     
   }
   return (
     <div className="mt-20 container mx-auto">
