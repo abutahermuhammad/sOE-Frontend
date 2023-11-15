@@ -4,6 +4,9 @@ import { AuthContext } from "../provider/AuthProvider";
 import { useState } from "react";
 import { useEffect } from "react";
 import Calender from "../Components/Calender";
+import { Link } from 'react-router-dom';
+import Spinner from '../Components/Spinner';
+import { useMemo } from 'react';
 
 const parseCustomTime = (timeString) => {
   const [hours, minutes] = timeString.split(':');
@@ -14,14 +17,21 @@ const Dashboard = () => {
   const { userInfo } = useContext(AuthContext)
   const [users, setUsers] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [isLoading, setisLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [routineData , setRoutineData] = useState([]);
- console.log(dashboardData)
 
-  // {
-  //   routineData?.map(routine => setRoutine(routine) )
-  // }
+ const [admissionData, setAdmissionData] = useState([]);
+
+
+ const filteredRoutineData = useMemo(() => {
+   if (dashboardData[0] && admissionData.length > 0) {
+     return admissionData.filter(item => item.batch === dashboardData[0]?.batch);
+   }
+   return [];
+ }, [dashboardData, admissionData]);
+
 
   const handlePrevClick = () => {
     const newDate = new Date(currentDate);
@@ -35,54 +45,49 @@ const Dashboard = () => {
     setCurrentDate(newDate);
   };
 
+
   useEffect(() => {
     fetch(`http://localhost:5000/routine_list/${currentDate}`)
       .then(response => response.json())
       .then(data => {
-        // console.log("routine", data)
-        const filterRoutine = data.filter(item => item?.batch === dashboardData[0].batch );
-        console.log("filter", filterRoutine);
-        setRoutineData(filterRoutine);
-        })
+        
+        setAdmissionData(data);
+      })
       .catch(error => console.error(error));
-  }, [currentDate,dashboardData]);
-
-useEffect(() => {
-  setLoadingUser(true);
-
-  // Fetch user data
-  fetch("http://localhost:5000/user_list")
-    .then((res) => res.json())
-    .then((data) => {
-      setUsers(data);
-      setLoadingUser(false); // Set loading to false once user data is fetched
-    })
-    .catch((error) => {
-      console.error("Error fetching user details:", error);
-      // setLoadingUser(false); // Set loading to false in case of an error
-    });
-}, []);
-const currentUserPhone = userInfo?.phone;
-const currentUser = users.find((user) => user.phone === currentUserPhone);
-useEffect(() => {
-
-   if(currentUser){
-    fetch('http://localhost:5000/admission_list')
-    .then((res) => res.json())
-    .then((data) => {
-// console.log("first", data)
-      // Filter and set dashboard data based on the currentUser
-      const filteredData = data.filter(item => item.phone === currentUser.phone);
-  setDashboardData(filteredData);
-     })
-    .catch((error) => {
-      console.error("Error fetching dashboard details:", error);
-    });
-   }
+  }, [currentDate]);
   
+  useEffect(() => {
+    setLoadingUser(true);
 
-}, [currentUser, currentDate, routineData]);
+    fetch("http://localhost:5000/user_list")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        setLoadingUser(false);
+        setisLoading(false);
+      })
+      .catch((error) => {
+        // console.error("Error fetching user details:", error);
+        setLoadingUser(false);
+      });
+  }, []);
 
+  useEffect(() => {
+    if (userInfo) {
+      fetch('http://localhost:5000/admission_list')
+        .then((res) => res.json())
+        .then((data) => {
+          const filteredData = data.filter(item => item.phone === userInfo.phone);
+          setDashboardData(filteredData);
+          
+          setisLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching dashboard details:", error);
+          setisLoading(false);
+        });
+    }
+  }, [userInfo]);
 
 
   return (
@@ -95,16 +100,25 @@ useEffect(() => {
       />
       <div className="text-center">
            {/* Check if routineData is not empty */}
-           {routineData.length > 0 ? (
+ 
+
+{filteredRoutineData.length > 0 ? (
           <>
-            <h2 className="text-2xl font-semibold mb-2 text-purple-600">
-              পরীক্ষা: {routineData[0].exam} <span> সময়:   {format(parseCustomTime(routineData[0].examTime), 'h:mm a')}</span>
+           <Link to='/'>
+           <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
+              পরীক্ষা: {filteredRoutineData[0].exam} <span> সময়:   {format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}</span>
             </h2>
-            <h2 className="text-2xl font-semibold">ক্লাস: {routineData[0].routineClass}</h2>
+           </Link>
+           <Link>
+           <h2 className="text-2xl font-semibold hover:text-red-500">ক্লাস: {filteredRoutineData[0]?.routineClass}</h2>
+           </Link>
           </>
         ) : (
           <p className="text-red-500 text-xl" > আজ তোমার কোনো রুটিন নাই ! </p>
         )}
+
+          
+        
       </div>
    
       
