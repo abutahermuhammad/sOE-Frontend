@@ -64,10 +64,11 @@ const Sidebar = () => {
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-start w-full bg-white">
           {/* Page content here */}
-
+          <div className=' bg-[#020957] p-2 py-8 w-full '>
+          </div>
 
           <div className="absolute left-5 dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden text-white">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
             </label>
             <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
@@ -96,7 +97,7 @@ const Sidebar = () => {
                   ))
                 ) : (
                   <div>
-                    <p  className="text-center text-red-500 text-2xl font-bold">No courses available. </p>
+                    <p className="text-center text-red-500 text-2xl font-bold">No courses available. </p>
                     <Link className="text-green-500" to="/">Go to Home</Link>
                   </div>
                 )}
@@ -130,7 +131,7 @@ const Sidebar = () => {
             <div className="divider"></div>
             <div className="text-[16px]">
               <li><NavLink to='/dashboard/home'>My Routine</NavLink></li>
-           
+
               <ul className="menu menu-horizontal px-1 text-[16px] ">
                 <li tabIndex={0}>
                   <details>

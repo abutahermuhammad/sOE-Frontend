@@ -327,3 +327,39 @@ MongoClient.connect(mongoURI, { useNewUrlParser: true })
   </div>
 </div>
 
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios';
+
+const CalendarComponent = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [data, setData] = useState([]);
+
+  const handleDateChange = async (date) => {
+    setSelectedDate(date);
+
+    try {
+      // Make an API call to fetch data based on the selected date
+      const response = await axios.get(`/api/data/${date.toISOString().split('T')[0]}`);
+      setData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <DatePicker selected={selectedDate} onChange={handleDateChange} />
+      {/* Render data based on the selected date */}
+      {data.map((item) => (
+        <div key={item._id}>
+          <p>Exam: {item.exam}</p>
+          <p>Routine Class: {item.routineClass}</p>
+          {/* Other fields... */}
+        </div>
+      ))}
+    </div>
+  );
+};
+
