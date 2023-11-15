@@ -45,7 +45,7 @@ const Dashboard = () => {
         setRoutineData(filterRoutine);
         })
       .catch(error => console.error(error));
-  }, [currentDate]);
+  }, [currentDate,dashboardData]);
 
 useEffect(() => {
   setLoadingUser(true);
