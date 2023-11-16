@@ -31,7 +31,7 @@ const SignUp = () => {
       // console.log('doctor', data);
       if(data.message == "already exisit"){
         alert('Already Exists')
-        reset();
+        form.reset();
        }
 
      else if (data.insertedId) {
