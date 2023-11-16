@@ -363,3 +363,26 @@ const CalendarComponent = () => {
   );
 };
 
+if (isAdmit) {
+  // Check if the roll also exists in the result collection
+  const resultCollection = db.collection('resultCollection');
+  const isResultExist = await resultCollection.findOne({ roll: roll, examName: examName });
+
+  if (isResultExist) {
+    // If the roll exists in both collections, send a message
+    res.json({ message: 'Roll already exists in both collections' });
+  } else {
+    // If the roll only exists in the admission collection, retrieve the results
+    const results = await resultCollection.find({ roll: roll, examName: examName }).toArray();
+    res.json(results);
+  }
+} else {
+  // If the roll doesn't exist in the admission collection
+  res.status(404).json({ error: 'Roll not found for the provided exam name' });
+}
+} catch (error) {
+console.error('Error:', error);
+res.status(500).json({ error: 'Internal Server Error' });
+} finally {
+await client.close();
+}

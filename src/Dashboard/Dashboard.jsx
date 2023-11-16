@@ -21,12 +21,12 @@ const Dashboard = () => {
   const [isLoading, setisLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [routineData , setRoutineData] = useState([]);
+ 
  const [admissionData, setAdmissionData] = useState([]);
  const [isButtonEnable, setisButtonEnable] = useState(false);
  const { pathname } = useLocation();
+//  
 
- const navigate = useNavigate();
 
  const filteredRoutineData = useMemo(() => {
    if (dashboardData[0] && admissionData.length > 0) {
@@ -105,7 +105,7 @@ let minutes = String(toDay.getMinutes()).padStart(2, '0');
 
 let formattedTime = `${hours}:${minutes}`;
 
-console.log(filteredRoutineData)
+
 useEffect(() => {
   if (filteredRoutineData.length > 0) {
     if (filteredRoutineData[0].date >= formattedDate && (filteredRoutineData[0].examTime <= formattedTime && filteredRoutineData[0].endTime >= formattedTime) ) {
@@ -116,12 +116,14 @@ useEffect(() => {
   }
 }, [filteredRoutineData, formattedDate, formattedTime]);
 
-  const handleExamByName = () =>{
-    // fetch(`http://localhost:5000/question_list/${filteredRoutineData[0].exam}`)
-    
-    console.log("click on examhande")
-navigate('/dashboard/exam')
-  }
+
+
+
+
+
+
+
+  
 
 
   return (
@@ -139,19 +141,38 @@ onNextClick={handleNextClick}
     
 {filteredRoutineData.length > 0 ? (
     <>
-    <button disabled={!isButtonEnable} onClick={handleExamByName}>
-    {/* <Link to='/dashboard/exam'> */}
-     <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
-        পরীক্ষা: {filteredRoutineData[0].exam}  |  <span className='text-green-500'>
-          {isButtonEnable ? (
-            ' পরীক্ষা চলতেছে . . .'
+    <button disabled={!isButtonEnable}  >
+ 
+ {
+  isButtonEnable ? 
+  (
+    <Link to='/dashboard/exam'>
+    <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
+       পরীক্ষা: {filteredRoutineData[0].exam}  |  <span className='text-green-500'>
+         {isButtonEnable ? (
+           ' পরীক্ষা চলতেছে . . .'
 
-          )  :  (
-            ` সময়: ${format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}`
-          )}
-        </span>
-      </h2>
-     {/* </Link> */}
+         )  :  (
+           ` সময়: ${format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}`
+         )}
+       </span>
+     </h2>
+     </Link>
+  ):(
+    <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
+    পরীক্ষা: {filteredRoutineData[0].exam}  |  <span className='text-green-500'>
+      {isButtonEnable ? (
+        ' পরীক্ষা চলতেছে . . .'
+
+      )  :  (
+        ` সময়: ${format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}`
+      )}
+    </span>
+  </h2>
+  )
+
+ }
+
     </button>
      <Link>
      <h2 className="text-2xl font-semibold hover:text-red-500">ক্লাস: {filteredRoutineData[0]?.routineClass}</h2>
@@ -164,7 +185,10 @@ onNextClick={handleNextClick}
     
   
 </div>
-{pathname === '/dashboard/exam' && <Exam  />}
+
+{/* {pathname === '/dashboard/exam' && <Exam questionInfo={questioneData} />}
+
+{pathname === '/dashboard/exam' && <Exam questionInfo={questioneData} />} */}
 
 
 </div>
