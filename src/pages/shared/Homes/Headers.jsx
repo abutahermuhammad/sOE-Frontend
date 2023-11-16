@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Headers = () => {
   const { user,logOut,userInfo } = useContext(AuthContext);
   const [isVisible, setIsVisible] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -19,21 +19,6 @@ const Headers = () => {
 
     return () => clearTimeout(timer);
   }, []); 
-
-
-  // const handleDashboard = () => {
-  //   console.log("cliked to dashboard")
-  //   fetch(`http://localhost:5000/dashboardDetails/${userInfo?.phone}`)
-  //     .then(res => res.json())
-  //     .then(data => {
-  //       navigate("/dashboard", { state: { dashboardData: data } });
-  //       console.log("dashboard user from header", data);
-  //     })
-  //     .catch(error => {
-  //       console.error("Error fetching dashboard details:", error);
-  //     });
-  // };
-
 
 
 

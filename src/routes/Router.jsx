@@ -16,6 +16,7 @@ import Sidebar from "../Dashboard/SideBar/SideBar";
 import Dashboard from "../Dashboard/Dashboard";
 import Exam from "../Dashboard/Exam/Exam";
 import WrittenExam from "../Dashboard/Exam/writtenexam/WrittenExam";
+import PrivateRoutes from "./PrivateRoutes";
 
 const routes = createBrowserRouter([
   {
@@ -61,7 +62,7 @@ const routes = createBrowserRouter([
 
 {
   path:'dashboard',
-  element:<Sidebar/>,
+  element: <PrivateRoutes><Sidebar/></PrivateRoutes> ,
   children:[
     {
       path:'home',
