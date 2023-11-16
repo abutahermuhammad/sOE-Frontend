@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
     .then(data => {
       if (data.status === "invalid User") {
         setLoading(false);
-        setError('Invalid credentials');
+        setError('ভুল হয়েছে, আর একটু মনে করার চেষ্টা করো !');
         setUser({ isAuthenticated: false });
       } else if (data.status === 'valid User') {
         // Store user information in local storage

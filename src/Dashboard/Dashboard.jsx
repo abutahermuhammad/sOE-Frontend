@@ -4,9 +4,10 @@ import { AuthContext } from "../provider/AuthProvider";
 import { useState } from "react";
 import { useEffect } from "react";
 import Calender from "../Components/Calender";
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Spinner from '../Components/Spinner';
 import { useMemo } from 'react';
+import Exam from './Exam/Exam';
 
 const parseCustomTime = (timeString) => {
   const [hours, minutes] = timeString.split(':');
@@ -21,9 +22,11 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [routineData , setRoutineData] = useState([]);
-
  const [admissionData, setAdmissionData] = useState([]);
+ const [isButtonEnable, setisButtonEnable] = useState(false);
+ const { pathname } = useLocation();
 
+ const navigate = useNavigate();
 
  const filteredRoutineData = useMemo(() => {
    if (dashboardData[0] && admissionData.length > 0) {
@@ -88,41 +91,85 @@ const Dashboard = () => {
         });
     }
   }, [userInfo]);
+  // current data
+  // Get current date and time
+let toDay = new Date();
+// Format the date as yyyy-MM-dd
+let year = toDay.getFullYear();
+let month = String(toDay.getMonth() + 1).padStart(2, '0'); // Months are ero-based
+let day = String(toDay.getDate()).padStart(2, '0');
+let formattedDate = `${year}-${month}-${day}`;
+// Format the time as HH:mm
+let hours = String(toDay.getHours()).padStart(2, '0');
+let minutes = String(toDay.getMinutes()).padStart(2, '0');
+
+let formattedTime = `${hours}:${minutes}`;
+
+console.log(filteredRoutineData)
+useEffect(() => {
+  if (filteredRoutineData.length > 0) {
+    if (filteredRoutineData[0].date >= formattedDate && (filteredRoutineData[0].examTime <= formattedTime && filteredRoutineData[0].endTime >= formattedTime) ) {
+      setisButtonEnable(true);
+    } else { 
+      setisButtonEnable(false);
+    }
+  }
+}, [filteredRoutineData, formattedDate, formattedTime]);
+
+  const handleExamByName = () =>{
+    // fetch(`http://localhost:5000/question_list/${filteredRoutineData[0].exam}`)
+    
+    console.log("click on examhande")
+navigate('/dashboard/exam')
+  }
 
 
   return (
-    <div className="w-4/5 md:px-10 mt-3 md:flex justify-around items-center  gap-6 shadow-2xl rounded-lg p-5 ">   
 
-      <Calender
-      currentDate={currentDate}
-      onPrevClick={handlePrevClick}
-      onNextClick={handleNextClick}
-      />
-      <div className="text-center">
-           {/* Check if routineData is not empty */}
- 
+     <div className="w-4/5 md:px-10 mt-3 md:flex justify-around items-center  gap-6 shadow-2xl rounded-lg p-5 ">   
 
+<Calender
+currentDate={currentDate}
+onPrevClick={handlePrevClick}
+onNextClick={handleNextClick}
+/>
+<div className="text-center">
+     {/* Check if routineData is not empty */}
+
+    
 {filteredRoutineData.length > 0 ? (
-          <>
-           <Link to='/'>
-           <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
-              পরীক্ষা: {filteredRoutineData[0].exam} <span> সময়:   {format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}</span>
-            </h2>
-           </Link>
-           <Link>
-           <h2 className="text-2xl font-semibold hover:text-red-500">ক্লাস: {filteredRoutineData[0]?.routineClass}</h2>
-           </Link>
-          </>
-        ) : (
-          <p className="text-red-500 text-xl" > আজ তোমার কোনো রুটিন নাই ! </p>
-        )}
+    <>
+    <button disabled={!isButtonEnable} onClick={handleExamByName}>
+    {/* <Link to='/dashboard/exam'> */}
+     <h2 className="text-2xl font-semibold mb-2 text-purple-600 hover:text-red-500">
+        পরীক্ষা: {filteredRoutineData[0].exam}  |  <span className='text-green-500'>
+          {isButtonEnable ? (
+            ' পরীক্ষা চলতেছে . . .'
 
-          
-        
-      </div>
-   
-      
-    </div>
+          )  :  (
+            ` সময়: ${format(parseCustomTime(filteredRoutineData[0].examTime), 'h:mm a')}`
+          )}
+        </span>
+      </h2>
+     {/* </Link> */}
+    </button>
+     <Link>
+     <h2 className="text-2xl font-semibold hover:text-red-500">ক্লাস: {filteredRoutineData[0]?.routineClass}</h2>
+     </Link>
+    </>
+  ) : (
+    <p className="text-red-500 text-xl" > আজ তোমার কোনো রুটিন নাই ! </p>
+  )}
+
+    
+  
+</div>
+{pathname === '/dashboard/exam' && <Exam  />}
+
+
+</div>
+
+
   );
   };
 
