@@ -50,11 +50,11 @@ const Dashboard = () => {
 
 
   useEffect(() => {
-    fetch(`http://localhost:5000/routine_list/${currentDate}`)
+    fetch(`${import.meta.env.VITE_API_URL}/routine_list/${currentDate}`)
       .then(response => response.json())
       .then(data => {
         
-        setAdmissionData(data);
+        setAdmissionData(data.data);
       })
       .catch(error => console.error(error));
   }, [currentDate]);
@@ -62,10 +62,10 @@ const Dashboard = () => {
   useEffect(() => {
     setLoadingUser(true);
 
-    fetch("http://localhost:5000/user_list")
+    fetch(`${import.meta.env.VITE_API_URL}/user_list`)
       .then((res) => res.json())
       .then((data) => {
-        setUsers(data);
+        setUsers(data.data);
         setLoadingUser(false);
         setisLoading(false);
       })
@@ -77,10 +77,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (userInfo) {
-      fetch('http://localhost:5000/admission_list')
+      fetch(`${import.meta.env.VITE_API_URL}/admission_list`)
         .then((res) => res.json())
         .then((data) => {
-          const filteredData = data.filter(item => item.phone === userInfo.phone);
+          const filteredData = data.data.filter(item => item.phone === userInfo.phone);
           setDashboardData(filteredData);
           
           setisLoading(false);
@@ -186,9 +186,7 @@ onNextClick={handleNextClick}
   
 </div>
 
-{/* {pathname === '/dashboard/exam' && <Exam questionInfo={questioneData} />}
 
-{pathname === '/dashboard/exam' && <Exam questionInfo={questioneData} />} */}
 
 
 </div>

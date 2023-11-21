@@ -11,6 +11,7 @@ import Spinner from "../../Components/Spinner";
 const Sidebar = () => {
   const { user, logOut, userInfo } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
   const [loadingUser, setLoadingUser] = useState(true);
   const [dashboardData, setDashboardData] = useState([]);
   const location = useLocation();
@@ -19,10 +20,11 @@ const Sidebar = () => {
     setLoadingUser(true);
 
     // Fetch user data
-    fetch("http://localhost:5000/user_list")
+    fetch(`${import.meta.env.VITE_API_URL}/user_list`)
       .then((res) => res.json())
       .then((data) => {
-        setUsers(data);
+        setUsers(data.data);
+        // console.log(data)
         setLoadingUser(false); // Set loading to false once user data is fetched
       })
       .catch((error) => {
@@ -33,24 +35,26 @@ const Sidebar = () => {
   const currentUserPhone = userInfo?.phone;
   const currentUser = users.find((user) => user.phone === currentUserPhone);
   useEffect(() => {
-
+    setisLoading(true);
     if (currentUser) {
-      console.log("current user", currentUser);
+      
       // Fetch dashboard data
-      fetch("http://localhost:5000/mycoureses")
+      fetch(`${import.meta.env.VITE_API_URL}/mycourses`)
         .then((res) => res.json())
         .then((data) => {
-
+          setisLoading(false)
           // Filter and set dashboard data based on the currentUser
-          const filteredData = data.filter(item => item.phone === currentUser.phone);
+          const filteredData = data.data.filter(item => item.phone === currentUser.phone);
           setDashboardData(filteredData);
+          setisLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching dashboard details:", error);
         });
+        
     }
 
-  }, [loadingUser, userInfo?.phone, users]);
+  }, [loadingUser, userInfo?.phone, users, currentUser]);
 
   const handleLogOut = () => {
     logOut();
@@ -90,19 +94,24 @@ const Sidebar = () => {
             <div className="w-full px-10 min-h-screen">
               <h1 className="text-[40px] text-center py-2 rounded-lg my-3 font-semibold text-slate-50 bg-gradient-to-r from-blue-500 via-violet-800 to-[#140e4d] "> আমার কোর্স সমূহ  </h1>
               {/* Rest of your component */}
-              <div className="mx-auto grid md:grid-cols-3 gap-5 ">
-                {dashboardData && dashboardData.length > 0 ? (
-                  dashboardData.map(mycourse => (
-                    <MyCourseCard key={mycourse._id} mycourse={mycourse} />
-                  ))
-                ) : (
-                  <div>
-                    <p className="text-center text-red-500 text-2xl font-bold">No courses available. </p>
-                    <Link className="text-green-500" to="/">Go to Home</Link>
-                  </div>
-                )}
+              {
 
-              </div>
+                isLoading ? <Spinner /> :
+                  <div className="mx-auto grid md:grid-cols-3 gap-5 ">
+                    {dashboardData && dashboardData.length > 0 ? (
+                      dashboardData.map(mycourse => (
+                        <MyCourseCard key={mycourse._id} mycourse={mycourse} />
+                      ))
+                    ) : (
+                      <div>
+                        <p className="text-center text-red-500 text-2xl font-bold">No courses available. </p>
+                        <Link className="text-green-500" to="/">Go to Home</Link>
+                      </div>
+                    )}
+
+                  </div>
+
+              }
 
             </div>
 

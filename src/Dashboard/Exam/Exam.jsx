@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { format, parse } from 'date-fns';
+
+import { useState, useEffect } from "react";
 import ExamFormate from "./ExamFormate";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -6,7 +8,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 import { useMemo } from "react";
 
 const Exam = () => {
-  const [match, setMatch] = useState("");
+  const [examNow, setexamNow] = useState([]);
   const { userInfo } = useContext(AuthContext)
   const [users, setUsers] = useState([]);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -21,7 +23,10 @@ const Exam = () => {
   const [showInput, setShowInput] = useState(true);
   const [showWaitForResult, setShowWaitForResult] = useState(false);
   const [showStartExamButton, setShowStartExamButton] = useState(false);
-
+  const parseCustomTime = (timeString) => {
+    const [hours, minutes] = timeString.split(':');
+    return parse(`${hours}:${minutes}`, 'HH:mm', new Date());
+  };
   const filteredRoutineData = useMemo(() => {
     if (dashboardData[0] && admissionData.length > 0) {
       return admissionData.filter(item => item.batch === dashboardData[0]?.batch);
@@ -44,7 +49,7 @@ const Exam = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/routine_list/${currentDate}`)
+    fetch(`${import.meta.env.VITE_API_URL}/routine_list/${currentDate}`)
       .then(response => response.json())
       .then(data => {
 
@@ -56,7 +61,7 @@ const Exam = () => {
   useEffect(() => {
     setLoadingUser(true);
 
-    fetch("http://localhost:5000/user_list")
+    fetch(`${import.meta.env.VITE_API_URL}/user_list`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -71,7 +76,7 @@ const Exam = () => {
 
   useEffect(() => {
     if (userInfo) {
-      fetch('http://localhost:5000/admission_list')
+      fetch(`${import.meta.env.VITE_API_URL}/admission_list`)
         .then((res) => res.json())
         .then((data) => {
           const filteredData = data.filter(item => item.phone === userInfo.phone);
@@ -92,7 +97,7 @@ const Exam = () => {
 
   const handleExamByName = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/question_list/${filteredRoutineData[0]?.exam}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/question_list/${filteredRoutineData[0]?.exam}`);
       const questions = await response.json();
 
       setquestioneData(questions);
@@ -107,12 +112,21 @@ const Exam = () => {
     }
   };
 
+  useEffect(()=>{
+    fetch(`${import.meta.env.VITE_API_URL}/exam_list/${filteredRoutineData[0].exam}`)
+    .then(res => res.json())
+    .then(data => {
+      setexamNow(data);
+      console.log("exam data ff", data);
+    })
+  },[filteredRoutineData])
+
 
   const handleSearchRoll = event => {
     event.preventDefault();
     const form = event.target;
     const roll = form.rollNumber.value;
-    fetch(`http://localhost:5000/result_list/${roll}/${filteredRoutineData[0].exam}/${userInfo.phone}`)
+    fetch(`${import.meta.env.VITE_API_URL}/result_list/${roll}/${filteredRoutineData[0].exam}/${userInfo.phone}`)
       .then(res => res.json())
       .then(data => {
         console.log("roll data", data);
@@ -124,7 +138,7 @@ const Exam = () => {
           setShowStartExamButton(true);
         }
         else {
-         setError("Unauthorized Access, Internal Server Error")
+          setError("Unauthorized Access, Internal Server Error")
         }
       })
     // console.log(roll);
@@ -134,9 +148,9 @@ const Exam = () => {
 
     <div className="w-full md:px-10 md:mt-2">
       <p className="text-red-500 text-center">{error}</p>
-      {showInput && !showStartExamButton &&(
+      {showInput && !showStartExamButton && (
         // Render input field if roll is not entered
-                <form onSubmit={handleSearchRoll} >
+        <form onSubmit={handleSearchRoll} >
           <div className="w-1/2 mx-auto">
             <div className="form-control">
               <label className="label">
@@ -164,7 +178,7 @@ const Exam = () => {
 
       {showStartExamButton && showInput && (
         // Render "Start Exam" button if roll doesn't exist in result collection
-        <button className="btn btn-warning mx-auto text-center flex justify-center mt-3" onClick={handleExamByName}>
+        <button className="btn btn-warning mx-atext-2xluto text-center flex justify-center mt-3" onClick={handleExamByName}>
           Start Exam
         </button>
       )}
@@ -172,24 +186,58 @@ const Exam = () => {
       {questioneData && questioneData.length > 0 && (
         // Render main content if questions are available
         <div>
-          <div className="w-full p-10 bg-[#f4f4f5] grid md:grid-cols-2 gap-5">
-            {questioneData.map((questions, index) => (
-              <ExamFormate
-                key={index}
-                questions={questions}
-                questionNumber={index + 1}
-                onAnswerSelected={handleAnswerSelected}
-              />
-            ))}
+          <div className="md:w-8/12 w-full p-1 md:flex  md:gap-40 gap-5 justify-center  items-center rounded-lg bg-[#020957]  fixed z-40 top-0 text-yellow-500 ">
+            <h1 className="md:text-2xl">Remaining Time</h1>
+            {/* ********** */}
+
+            <div className="grid grid-flow-col gap-5 text-center auto-cols-max ">
+
+              <div className="flex flex-col md:p-2 p-1 bg-white  rounded-box text-red-500">
+                <span className="countdown font-mono md:text-2xl text-red-500">
+                  <span style={{ "--value": 10 }}></span>
+                </span>
+                hours
+              </div>
+              <div className="flex flex-col md:p-2 p-1 bg-white  rounded-box text-red-500">
+                <span className="countdown font-mono md:text-2xl text-red-500">
+                  <span style={{ "--value": 24 }}></span>
+                </span>
+                min
+              </div>
+              <div className="flex flex-col md:p-2 p-1 bg-white  rounded-box text-red-500">
+                <span className="countdown font-mono md:text-2xl text-red-500">
+                  <span style={{ "--value": 47 }}></span>
+                </span>
+                sec
+              </div>
+
+            </div>
+            <div>
+              {/* <h1 className="md:text-2xl">Exam End Time: {format(parseCustomTime(filteredRoutineData[0].endTime), 'h:mm a')} </h1> */}
+            </div>
           </div>
-          <div className="flex justify-center">
-            <button
-              className="btn-primary px-3 py-2 rounded-md "
-              onClick={handleSubmitQuiz}
-            >
-              Submit
-            </button>
+          <div>
+
+            <div className="w-full p-10 bg-[#f4f4f5] grid md:grid-cols-2 gap-5 mt-6">
+              {questioneData.map((questions, index) => (
+                <ExamFormate
+                  key={index}
+                  questions={questions}
+                  questionNumber={index + 1}
+                  onAnswerSelected={handleAnswerSelected}
+                />
+              ))}
+            </div>
+            <div className="flex justify-center">
+              <button
+                className="btn-primary px-3 py-2 rounded-md "
+                onClick={handleSubmitQuiz}
+              >
+                Submit
+              </button>
+            </div>
           </div>
+
         </div>
       )}
     </div>

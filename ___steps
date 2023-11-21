@@ -386,3 +386,48 @@ res.status(500).json({ error: 'Internal Server Error' });
 } finally {
 await client.close();
 }
+
+const express = require('express');
+const router = express.Router();
+const { MongoClient } = require('mongodb');
+
+const url = 'mongodb://localhost:27017'; // MongoDB connection URL
+const dbName = 'yourdb'; // Your database name
+
+router.get('/getExamData', async (req, res) => {
+  const selectedExamName = req.query.examName; // Assuming you pass the exam name in the query string
+
+  const client = new MongoClient(url, { useUnifiedTopology: true });
+
+  try {
+    await client.connect();
+    const db = client.db(dbName);
+    const examCollection = db.collection('examcollection');
+    const questionCollection = db.collection('questioncollection');
+
+    const aggregationPipeline = [
+      {
+        $match: { name: selectedExamName }, // Match the selected exam name
+      },
+      {
+        $lookup: {
+          from: 'questioncollection',
+          localField: 'name', // Field in examcollection
+          foreignField: 'examName', // Field in questioncollection
+          as: 'questions', // Alias for the joined questions
+        },
+      },
+    ];
+
+    const result = await examCollection.aggregate(aggregationPipeline).toArray();
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  } finally {
+    client.close();
+  }
+});
+
+module.exports = router;

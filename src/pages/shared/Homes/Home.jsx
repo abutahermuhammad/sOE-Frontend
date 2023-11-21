@@ -9,6 +9,7 @@ import ChooseUs from "./whySoE/ChooseUs";
 const Home = () => {
   return (
     <div>
+    
       <Slides/>
       <Coureses/>
       <Mentors/>

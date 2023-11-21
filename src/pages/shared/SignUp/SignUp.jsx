@@ -19,7 +19,7 @@ const SignUp = () => {
     const userData = {name, phone, password, status: 'active',Date:formattedDate, role:'student', photo:' '}
     console.log(userData);
     // post data on database
-    fetch('http://localhost:5000/register',{
+    fetch(`${import.meta.env.VITE_API_URL}/register`,{
       method:"POST",
       headers:{
         'content-type': 'application/json'

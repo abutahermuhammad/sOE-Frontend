@@ -27,7 +27,7 @@ const AuthProvider = ({ children }) => {
   // login system
   const login = (phone, password) => {
     setLoading(true);
-    fetch('http://localhost:5000/logged', {
+    fetch(`${import.meta.env.VITE_API_URL}/logged`, {
       method: "POST",
       headers: {
         'content-type': 'application/json'
